@@ -10,6 +10,7 @@ class DFA:
         self.alphabet = alphabet
         self.transition_table = transition_table
         self.state = initial_state
+        self.initial_state = initial_state
         self.final_state = final_state
         self.running = True
 
@@ -18,7 +19,6 @@ class DFA:
         for c in input:
             if not self.running:
                 print(f"{self.name} is not running")
-                self.running = False
                 return False
 
             # c is not defined in alphabet
@@ -41,6 +41,10 @@ class DFA:
             else:
                 self.running = False
                 return False
+
+    def reset(self):
+        self.state = self.initial_state
+        self.running = True
 
     def isDone(self):
         return self.running and self.state == self.final_state
