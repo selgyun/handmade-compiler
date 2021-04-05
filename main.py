@@ -5,13 +5,13 @@ from dfa import DFA
 import string
 
 table = TransitionTable()
-# print(table.SINGLE_CHARACTER)
+# print(table.table)
 singleChar = DFA(
     "single character",
     string.digits + string.ascii_letters + "'",
-    table.SINGLE_CHARACTER,
+    table.table["SINGLE_CHARACTER"],
     0,
-    5,
+    table.get_final_states("SINGLE_CHARACTER"),
 )
 
 singleChar.run("'")
