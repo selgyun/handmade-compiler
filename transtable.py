@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import string
-from typing import final
 
 
 # build_transition_table_with_lexemes build transition table
