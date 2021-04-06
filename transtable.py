@@ -5,6 +5,8 @@ import string
 # build_transition_table_with_lexemes build transition table
 # very easily from lexemes.
 # You can pass lexemes of the rule.
+# Note that this function works only when lexemes' first letter is
+# all different. If not, it won't be DFA transition rule.
 # e.g. build_transition_table_with_lexemes(["if", "else", "while"])
 def build_transition_table_with_lexemes(lexemes):
     transition_table = {}
@@ -70,10 +72,9 @@ class TransitionTable:
                 17: {},
                 "final": [17],
             },
-
             "SIGNED_INTEGER": {
-                0: {"0": 3, "-": 1, string.digits.replace('0', ''): 2},
-                1: {string.digits.replace('0', ''): 2},
+                0: {"0": 3, "-": 1, string.digits.replace("0", ""): 2},
+                1: {string.digits.replace("0", ""): 2},
                 2: {string.digits: 2},
                 3: {},
                 "final": [2, 3],
@@ -90,19 +91,16 @@ class TransitionTable:
                 7: {},
                 "final": [7],
             },
-
             "WHITE_SPACE": {
                 0: {string.whitespace: 1},
                 1: {string.whitespace: 1},
                 "final": [1],
             },
-
             "ARITHMETIC_OPERATOR": {
                 0: {"+": 1, "*": 1, "-": 1, "/": 1},
                 1: {},
                 "final": [1],
             },
-
             "LOGICAL_OPERATOR": {
                 0: {"&": 1, "|": 2},
                 1: {"&": 3},
@@ -110,86 +108,94 @@ class TransitionTable:
                 3: {},
                 "final": [3],
             },
-
             "ASSIGNMENT_OPERATOR": {
                 0: {"=": 1},
                 1: {},
                 "final": [1],
             },
-
             "COMPARISON_OPERATOR": {
                 0: {"<": 1, ">": 1, "=": 2, "!": 2},
                 1: {"=": 3},
                 2: {"=": 3},
                 3: {},
-                "final": [1, 3]
+                "final": [1, 3],
             },
-
             "TERMINATING_SYMBOL": {
                 0: {";": 1},
                 1: {},
                 "final": [1],
             },
-
             "LPAREN": {
                 0: {"(": 1},
                 1: {},
                 "final": [1],
             },
-
             "RPAREN": {
                 0: {")": 1},
                 1: {},
                 "final": [1],
             },
-
             "LBRACE": {
                 0: {"{": 1},
                 1: {},
                 "final": [1],
             },
-
             "RBRACE": {
                 0: {"}": 1},
                 1: {},
                 "final": [1],
             },
-
             "LBRANKET": {
                 0: {"[": 1},
                 1: {},
                 "final": [1],
             },
-
             "RBRANKET": {
                 0: {"]": 1},
                 1: {},
                 "final": [1],
             },
-
             "COMMA": {
                 0: {",": 1},
                 1: {},
                 "final": [1],
             },
-
             "LITERAL_STRING": {
                 0: {'"': 1},
-                1: {string.ascii_letters: 2, string.digits: 3, string.whitespace: 4, '"': 5},
-                2: {string.ascii_letters: 3, string.digits: 4, string.whitespace: 1, '"': 5},
-                3: {string.ascii_letters: 4, string.digits: 1, string.whitespace: 2, '"': 5},
-                4: {string.ascii_letters: 1, string.digits: 2, string.whitespace: 3, '"': 5},
+                1: {
+                    string.ascii_letters: 2,
+                    string.digits: 3,
+                    string.whitespace: 4,
+                    '"': 5,
+                },
+                2: {
+                    string.ascii_letters: 3,
+                    string.digits: 4,
+                    string.whitespace: 1,
+                    '"': 5,
+                },
+                3: {
+                    string.ascii_letters: 4,
+                    string.digits: 1,
+                    string.whitespace: 2,
+                    '"': 5,
+                },
+                4: {
+                    string.ascii_letters: 1,
+                    string.digits: 2,
+                    string.whitespace: 3,
+                    '"': 5,
+                },
                 5: {},
                 "final": [5],
             },
-
             "IDENTIFIER": {
                 0: {"_": 1, string.ascii_letters: 2},
                 1: {string.ascii_letters: 2, string.digits: 3, "_": 1},
                 2: {string.ascii_letters: 3, string.digits: 1, "_": 2},
                 3: {string.ascii_letters: 1, string.digits: 2, "_": 3},
-                "final": [1, 2, 3]
-            }
+                "final": [1, 2, 3],
+            },
         }
 
         self.table["KEYWORD"] = build_transition_table_with_lexemes(
