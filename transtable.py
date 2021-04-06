@@ -43,12 +43,18 @@ class TransitionTable:
         self.table = {
             "SINGLE_CHARACTER": {
                 0: {"'": 1},
-                1: {string.ascii_letters: 3, string.digits: 2, " ": 4},
+                1: {
+                    string.ascii_letters: 3,
+                    string.digits: 2,
+                    " ": 4,
+                    string.punctuation: 5,
+                },
                 2: {"'": 5},
                 3: {"'": 5},
                 4: {"'": 5},
-                5: {},
-                "final": [5],
+                5: {"'": 5},
+                6: {},
+                "final": [6],
             },
             # int, char, boolean, String
             "VARIABLE_TYPE": {
