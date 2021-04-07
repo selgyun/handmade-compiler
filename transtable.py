@@ -49,10 +49,10 @@ class TransitionTable:
                     " ": 4,
                     string.punctuation: 5,
                 },
-                2: {"'": 5},
-                3: {"'": 5},
-                4: {"'": 5},
-                5: {"'": 5},
+                2: {"'": 6},
+                3: {"'": 6},
+                4: {"'": 6},
+                5: {"'": 6},
                 6: {},
                 "final": [6],
             },
@@ -106,13 +106,6 @@ class TransitionTable:
                 0: {"+": 1, "*": 1, "-": 1, "/": 1},
                 1: {},
                 "final": [1],
-            },
-            "LOGICAL_OPERATOR": {
-                0: {"&": 1, "|": 2},
-                1: {"&": 3},
-                2: {"|": 3},
-                3: {},
-                "final": [3],
             },
             "ASSIGNMENT_OPERATOR": {
                 0: {"=": 1},
@@ -205,7 +198,7 @@ class TransitionTable:
         }
 
         self.table["KEYWORD"] = build_transition_table_with_lexemes(
-            ["if", "else", "while", "class", "return", "public"]
+            ["if", "else", "while", "class", "return", "public", "void", "main", "static"]
         )
 
     def get_final_states(self, name_of_rule):
