@@ -229,9 +229,12 @@ if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
     print(value, 'occurred error')
-
+f.close()
+f = open("output.txt", 'w')
 for token, v in output:
     if token == "<WHITE SPACE>":
         continue
+    f.write(token + " " + v + "\n")
     print(token, v)
 f.close()
+
