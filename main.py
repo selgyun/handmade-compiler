@@ -186,6 +186,7 @@ output = []
 getReady = []
 f = open("test.java", 'r')
 value = ""
+test = "a == 30"
 # 1. Open the file and perform DFA one letter at a time.
 # 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
 # 3. if DFA is passed, perform 1. again for the current input value
@@ -206,6 +207,8 @@ for input in f.read():
                         if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>":
                             output.pop()
                             value = '-' + value
+                elif dfa.name == "ASSIGNMENT OPERATOR" and lexical_analyzer[9].running:
+                    continue
             output.append(("<" + dfa.name + ">", value))
             value = ""
             getReady.clear()
@@ -222,7 +225,6 @@ for input in f.read():
                 getReady.append(dfa)
     value += input
 # when <signed integer> that include '-' comes eof, error occurred
-# there are bug in '==', '!=' -> '=', '='
 if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
