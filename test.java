@@ -5,6 +5,8 @@ public class test {
 		char b_b123 = '&';
 		boolean __cc = true;
 		String d__d_0 = "Hello World";
+		char _123if = ' ';
+		int _123if0 =-1 -0;
 		
 		if(_aa_a <= 0) {
 			_aa_a = 3923 + 41 - -1- -1- 1-1;

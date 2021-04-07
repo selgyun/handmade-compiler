@@ -9,7 +9,7 @@ table = TransitionTable()
 # print(table.table)
 singleChar = DFA(
     "SINGLE CHARACTER",
-    string.digits + string.ascii_letters + string.punctuation + "'",
+    string.digits + string.ascii_letters + string.punctuation + "'" + " ",
     table.table["SINGLE_CHARACTER"],
     0,
     table.get_final_states("SINGLE_CHARACTER"),
@@ -168,8 +168,8 @@ lexical_analyzer = [
     booleanString,
     whiteSpace,
     arithmeticOperator,
-    assignmentOperator,
     comparisonOperator,
+    assignmentOperator,
     terminatingSymbol,
     lparen,
     rparen,
@@ -186,7 +186,7 @@ output = []
 getReady = []
 f = open("test.java", 'r')
 value = ""
-test = "a == 30"
+test = "int main(){char if123='1';int 0a=a+-1;return -0;}"
 # 1. Open the file and perform DFA one letter at a time.
 # 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
 # 3. if DFA is passed, perform 1. again for the current input value
@@ -207,7 +207,9 @@ for input in f.read():
                         if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>":
                             output.pop()
                             value = '-' + value
-                elif dfa.name == "ASSIGNMENT OPERATOR" and lexical_analyzer[9].running:
+                elif dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
+                    continue
+                elif dfa.name == "KEYWORD" and input in [string.digits, string.ascii_letters, '_']:
                     continue
             output.append(("<" + dfa.name + ">", value))
             value = ""
