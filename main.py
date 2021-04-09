@@ -9,7 +9,7 @@ table = TransitionTable()
 # print(table.table)
 singleChar = DFA(
     "SINGLE CHARACTER",
-    string.digits + string.ascii_letters + string.punctuation + "'" + " ",
+    string.digits + string.ascii_letters + "'" + " ",
     table.table["SINGLE_CHARACTER"],
     0,
     table.get_final_states("SINGLE_CHARACTER"),
@@ -186,7 +186,7 @@ output = []
 getReady = []
 f = open("test.java", 'r')
 value = ""
-test = "=="
+test = "if123 = -1"
 # 1. Open the file and perform DFA one letter at a time.
 # 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
 # 3. if DFA is passed, perform 1. again for the current input value
