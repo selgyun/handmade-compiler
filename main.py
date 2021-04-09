@@ -186,7 +186,7 @@ output = []
 getReady = []
 f = open("test.java", 'r')
 value = ""
-test = "int main(){char if123='1';int 0a=a+-1;return -0;}"
+test = "=="
 # 1. Open the file and perform DFA one letter at a time.
 # 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
 # 3. if DFA is passed, perform 1. again for the current input value
@@ -207,10 +207,11 @@ for input in f.read():
                         if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>":
                             output.pop()
                             value = '-' + value
-                elif dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
-                    continue
-                elif dfa.name == "KEYWORD" and input in [string.digits, string.ascii_letters, '_']:
-                    continue
+            if dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
+                continue
+            elif dfa.name == "KEYWORD" and input in string.digits + string.ascii_letters + '_':
+                getReady.remove(dfa)
+                continue
             output.append(("<" + dfa.name + ">", value))
             value = ""
             getReady.clear()
