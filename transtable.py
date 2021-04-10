@@ -40,6 +40,12 @@ def build_transition_table_with_lexemes(lexemes):
 # Define the transition table to this class
 class TransitionTable:
     def __init__(self):
+        # Transition table is represented with
+        # "Transition Name": {
+        #   <state> : {
+        #     "transition key" : <next state>
+        #   }
+        # }
         self.table = {
             "SINGLE_CHARACTER": {
                 0: {"'": 1},
@@ -209,6 +215,7 @@ class TransitionTable:
             ]
         )
 
+    # get_final_states is utility function that returns final state of transition table.
     def get_final_states(self, name_of_rule):
         return self.table[name_of_rule]["final"]
 
