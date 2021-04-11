@@ -6,7 +6,6 @@ import string
 
 
 table = TransitionTable()
-# print(table.table)
 singleChar = DFA(
     "SINGLE CHARACTER",
     string.digits + string.ascii_letters + "'" + " ",
@@ -181,12 +180,12 @@ lexical_analyzer = [
     identifier,
 ]
 # output of lexical analyzer
-output = []
 # list of pass dfa
+output = []
 getReady = []
 f = open("test.java", 'r')
 value = ""
-test = "if123 = -1"
+# How to lexical analyzer works
 # 1. Open the file and perform DFA one letter at a time.
 # 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
 # 3. if DFA is passed, perform 1. again for the current input value
@@ -227,11 +226,17 @@ for input in f.read():
             if dfa.isDone():
                 getReady.append(dfa)
     value += input
-# when <signed integer> that include '-' comes eof, error occurred
 if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
     print(value, 'occurred error')
+
+if len(output) > 1:
+    if output[-1][0] == "<SIGNED INTEGER>" and output[-2][1] == '-':
+        v = output.pop()[1]
+        output.pop()
+        output.append(("<SIGNED INTEGER>", '-' + v))
+
 f.close()
 f = open("output.txt", 'w')
 for token, v in output:
