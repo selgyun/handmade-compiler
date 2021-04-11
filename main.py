@@ -218,7 +218,8 @@ for input in f.read():
                             idx = -3
                         else:
                             idx = -2
-                        if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>":
+                        if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>"\
+                                or output[idx][0] == "<COMMA>":
                             output.pop()
                             value = '-' + value
             # skip ASSIGNMENT OPERATOR when input value is '=' to recognize '=='
