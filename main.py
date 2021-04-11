@@ -6,6 +6,14 @@ import string
 
 
 table = TransitionTable()
+# Create DFAs in list of tokens consisting of
+# ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+# ┃ single character, variable type, literal string              ┃
+# ┃ signed integer, boolean string, white space                  ┃
+# ┃ arithmetic operator, assignment operator, comparison operator┃
+# ┃ terminating symbol, different types of parentheses           ┃
+# ┃ comma, identifier, keyword                                   ┃
+# ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 singleChar = DFA(
     "SINGLE CHARACTER",
     string.digits + string.ascii_letters + "'" + " ",
@@ -157,7 +165,8 @@ keyword = DFA(
     0,
     table.get_final_states("KEYWORD"),
 )
-
+# lexical analyzer is a list of DFAs
+# and the order is the weight of the DFA(the higher it is in the front)
 lexical_analyzer = [
     keyword,
     singleChar,
@@ -180,25 +189,31 @@ lexical_analyzer = [
     identifier,
 ]
 # output of lexical analyzer
-# list of pass dfa
 output = []
+# list of pass dfa : appended when dfa reached final state
 getReady = []
 f = open("test.java", 'r')
 value = ""
-# How to lexical analyzer works
-# 1. Open the file and perform DFA one letter at a time.
-# 2. Confirm that the DFA has been passed by receiving the following letters for the passed DFA
-# 3. if DFA is passed, perform 1. again for the current input value
+#           -*-    How to lexical analyzer works    -*-
+# 1. Open the file
+# 2. perform DFA one by one letter until eof.
+#   2-1. if DFA in 'getReady' got illegal input, goto 4.
+#   2-2. if DFA reached final state, put in 'getReady'
+# 3. 'input' concatenate to 'value', repeat the procedure 2.
+# 4. puts token and 'value' on 'output', reset all DFA and clear 'getReady'
+# 5. perform DFA via current input and check 2-2. goto 2.
 for input in f.read():
     # to check earn output
     flag = False
     for dfa in lexical_analyzer:
         success = dfa.run(input)
         if not success and dfa in getReady:
+            # basically '-' is recognized as an arithmetic operator
             # if <SIGNED INTEGER> follows the '-', the previous token is determine whether '-' in number or operator
             if len(output) > 0:
                 if (dfa.name == "SIGNED INTEGER" and output[-1][0] == "<ARITHMETIC OPERATOR>") and output[-1][1] == '-':
                     if len(output) > 1:
+                        # ignore <WHITE SPACE>
                         if output[-2][0] == "<WHITE SPACE>":
                             idx = -3
                         else:
@@ -206,14 +221,17 @@ for input in f.read():
                         if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>":
                             output.pop()
                             value = '-' + value
+            # skip ASSIGNMENT OPERATOR when input value is '=' to recognize '=='
             if dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
                 continue
+            # skip KEYWORD when input value is in alphabet in IDENTIFIER
             elif dfa.name == "KEYWORD" and input in string.digits + string.ascii_letters + '_':
                 getReady.remove(dfa)
                 continue
             output.append(("<" + dfa.name + ">", value))
             value = ""
             getReady.clear()
+            # earn output
             flag = True
             for reset_dfa in lexical_analyzer:
                 reset_dfa.reset()
@@ -226,11 +244,15 @@ for input in f.read():
             if dfa.isDone():
                 getReady.append(dfa)
     value += input
+
+# last value handling
 if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
     print(value, 'occurred error')
 
+# error handling when negative integer comes to eof
+# <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
 if len(output) > 1:
     if output[-1][0] == "<SIGNED INTEGER>" and output[-2][1] == '-':
         v = output.pop()[1]
@@ -238,8 +260,10 @@ if len(output) > 1:
         output.append(("<SIGNED INTEGER>", '-' + v))
 
 f.close()
+# write file output
 f = open("output.txt", 'w')
 for token, v in output:
+    # skip white space
     if token == "<WHITE SPACE>":
         continue
     f.write(token + " " + v + "\n")
