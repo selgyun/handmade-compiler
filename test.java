@@ -16,7 +16,7 @@ public class test {
 		}
 		
 		while(__cc) {
-			__cc = false;
+			__cc = false != false;
 		}
 		
 		return 0;
