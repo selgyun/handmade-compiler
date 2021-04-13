@@ -209,7 +209,6 @@ class TransitionTable:
                 "class",
                 "return",
                 "public",
-                "void",
                 "main",
                 "static",
             ]
