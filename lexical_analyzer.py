@@ -192,7 +192,10 @@ lexical_analyzer = [
 output = []
 # list of pass dfa : appended when dfa reached final state
 getReady = []
-f = open(sys.argv[1], "r")
+if len(sys.argv) != 1:
+    f = open(sys.argv[1], "r")
+else:
+    f = open("test.java", "r")
 value = ""
 #           -*-    How to lexical analyzer works    -*-
 # 1. Open the file
