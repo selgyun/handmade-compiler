@@ -258,11 +258,13 @@ for input in f.read():
                 getReady.append(dfa)
     value += input
 
+isError = False
 # last value handling
 if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
-    print(value, "occurred error")
+    isError = True
+    print("Error occurred at input:\n", value, "\nOutput below is analyze result until error occurred.")
 
 # error handling when negative integer comes to eof
 # <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
@@ -292,6 +294,8 @@ if len(sys.argv) != 1:
     f = open(sys.argv[1].split(".")[0] + "_output.txt", "w")
 else:
     f = open("output.txt", "w")
+if isError:
+    f.write("Error occurred at input:\n" + value + "\nOutput below is analyze result until error occurred.\n")
 for token, v in output:
     # skip white space
     if token == "<WHITE SPACE>":
