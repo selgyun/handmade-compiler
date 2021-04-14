@@ -2,7 +2,7 @@
 
 from transtable import TransitionTable
 from dfa import DFA
-import string
+import string, sys
 
 
 table = TransitionTable()
@@ -24,7 +24,7 @@ singleChar = DFA(
 
 variableType = DFA(
     "VARIABLE TYPE",
-    'i'+'n'+'t'+'f'+'l'+'o'+'a'+'b'+'e'+'c'+'h'+'r'+'S'+'g',
+    "i" + "n" + "t" + "f" + "l" + "o" + "a" + "b" + "e" + "c" + "h" + "r" + "S" + "g",
     table.table["VARIABLE_TYPE"],
     0,
     table.get_final_states("VARIABLE_TYPE"),
@@ -40,7 +40,7 @@ literalString = DFA(
 
 signedInteger = DFA(
     "SIGNED INTEGER",
-    string.digits + '-',
+    string.digits + "-",
     table.table["SIGNED_INTEGER"],
     0,
     table.get_final_states("SIGNED_INTEGER"),
@@ -48,7 +48,7 @@ signedInteger = DFA(
 
 booleanString = DFA(
     "BOOLEAN STRING",
-    't' + 'r' + 'u' + 'e' + 'f' + 'a' + 'l' + 's',
+    "t" + "r" + "u" + "e" + "f" + "a" + "l" + "s",
     table.table["BOOLEAN_STRING"],
     0,
     table.get_final_states("BOOLEAN_STRING"),
@@ -64,7 +64,7 @@ whiteSpace = DFA(
 
 arithmeticOperator = DFA(
     "ARITHMETIC OPERATOR",
-    '+' + '-' + '/' + '*',
+    "+" + "-" + "/" + "*",
     table.table["ARITHMETIC_OPERATOR"],
     0,
     table.get_final_states("ARITHMETIC_OPERATOR"),
@@ -72,7 +72,7 @@ arithmeticOperator = DFA(
 
 assignmentOperator = DFA(
     "ASSIGNMENT OPERATOR",
-    '=',
+    "=",
     table.table["ASSIGNMENT_OPERATOR"],
     0,
     table.get_final_states("ASSIGNMENT_OPERATOR"),
@@ -80,7 +80,7 @@ assignmentOperator = DFA(
 
 comparisonOperator = DFA(
     "COMPARISON OPERATOR",
-    '<' + '>' + '=' +'!',
+    "<" + ">" + "=" + "!",
     table.table["COMPARISON_OPERATOR"],
     0,
     table.get_final_states("COMPARISON_OPERATOR"),
@@ -88,7 +88,7 @@ comparisonOperator = DFA(
 
 terminatingSymbol = DFA(
     "TERMINATING SYMBOL",
-    ';',
+    ";",
     table.table["TERMINATING_SYMBOL"],
     0,
     table.get_final_states("TERMINATING_SYMBOL"),
@@ -96,7 +96,7 @@ terminatingSymbol = DFA(
 
 lparen = DFA(
     "LPAREN",
-    '(',
+    "(",
     table.table["LPAREN"],
     0,
     table.get_final_states("LPAREN"),
@@ -104,7 +104,7 @@ lparen = DFA(
 
 rparen = DFA(
     "RPAREN",
-    ')',
+    ")",
     table.table["RPAREN"],
     0,
     table.get_final_states("RPAREN"),
@@ -112,7 +112,7 @@ rparen = DFA(
 
 lbrace = DFA(
     "LBRACE",
-    '{',
+    "{",
     table.table["LBRACE"],
     0,
     table.get_final_states("LBRACE"),
@@ -120,7 +120,7 @@ lbrace = DFA(
 
 rbrace = DFA(
     "RBRACE",
-    '}',
+    "}",
     table.table["RBRACE"],
     0,
     table.get_final_states("RBRACE"),
@@ -128,7 +128,7 @@ rbrace = DFA(
 
 lbranket = DFA(
     "LBRANKET",
-    '[',
+    "[",
     table.table["LBRANKET"],
     0,
     table.get_final_states("LBRANKET"),
@@ -136,7 +136,7 @@ lbranket = DFA(
 
 rbranket = DFA(
     "RBRANKET",
-    ']',
+    "]",
     table.table["RBRANKET"],
     0,
     table.get_final_states("RBRANKET"),
@@ -144,7 +144,7 @@ rbranket = DFA(
 
 comma = DFA(
     "COMMA",
-    ',',
+    ",",
     table.table["COMMA"],
     0,
     table.get_final_states("COMMA"),
@@ -152,7 +152,7 @@ comma = DFA(
 
 identifier = DFA(
     "IDENTIFIER",
-    '_' + string.digits + string.ascii_letters,
+    "_" + string.digits + string.ascii_letters,
     table.table["IDENTIFIER"],
     0,
     table.get_final_states("IDENTIFIER"),
@@ -192,7 +192,7 @@ lexical_analyzer = [
 output = []
 # list of pass dfa : appended when dfa reached final state
 getReady = []
-f = open("test.java", 'r')
+f = open(sys.argv[1], "r")
 value = ""
 #           -*-    How to lexical analyzer works    -*-
 # 1. Open the file
@@ -211,22 +211,31 @@ for input in f.read():
             # basically '-' is recognized as an arithmetic operator
             # if <SIGNED INTEGER> follows the '-', the previous token is determine whether '-' in number or operator
             if len(output) > 0:
-                if (dfa.name == "SIGNED INTEGER" and output[-1][0] == "<ARITHMETIC OPERATOR>") and output[-1][1] == '-':
+                if (
+                    dfa.name == "SIGNED INTEGER"
+                    and output[-1][0] == "<ARITHMETIC OPERATOR>"
+                ) and output[-1][1] == "-":
                     if len(output) > 1:
                         # ignore <WHITE SPACE>
                         if output[-2][0] == "<WHITE SPACE>":
                             idx = -3
                         else:
                             idx = -2
-                        if output[idx][0] == "<ASSIGNMENT OPERATOR>" or output[idx][0] == "<ARITHMETIC OPERATOR>"\
-                                or output[idx][0] == "<COMMA>":
+                        if (
+                            output[idx][0] == "<ASSIGNMENT OPERATOR>"
+                            or output[idx][0] == "<ARITHMETIC OPERATOR>"
+                            or output[idx][0] == "<COMMA>"
+                        ):
                             output.pop()
-                            value = '-' + value
+                            value = "-" + value
             # skip ASSIGNMENT OPERATOR when input value is '=' to recognize '=='
             if dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
                 continue
             # skip KEYWORD when input value is in alphabet in IDENTIFIER
-            elif dfa.name == "KEYWORD" and input in string.digits + string.ascii_letters + '_':
+            elif (
+                dfa.name == "KEYWORD"
+                and input in string.digits + string.ascii_letters + "_"
+            ):
                 getReady.remove(dfa)
                 continue
             output.append(("<" + dfa.name + ">", value))
@@ -250,19 +259,19 @@ for input in f.read():
 if getReady:
     output.append(("<" + getReady.pop().name + ">", value))
 else:
-    print(value, 'occurred error')
+    print(value, "occurred error")
 
 # error handling when negative integer comes to eof
 # <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
 if len(output) > 1:
-    if output[-1][0] == "<SIGNED INTEGER>" and output[-2][1] == '-':
+    if output[-1][0] == "<SIGNED INTEGER>" and output[-2][1] == "-":
         v = output.pop()[1]
         output.pop()
-        output.append(("<SIGNED INTEGER>", '-' + v))
+        output.append(("<SIGNED INTEGER>", "-" + v))
 
 f.close()
 # write file output
-f = open("output.txt", 'w')
+f = open("output.txt", "w")
 for token, v in output:
     # skip white space
     if token == "<WHITE SPACE>":
@@ -270,4 +279,3 @@ for token, v in output:
     f.write(token + " " + v + "\n")
     print(token, v)
 f.close()
-
