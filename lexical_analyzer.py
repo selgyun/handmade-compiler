@@ -288,7 +288,10 @@ elif len(output) > 2:
 
 f.close()
 # write file output
-f = open("output.txt", "w")
+if len(sys.argv) != 1:
+    f = open(sys.argv[1].split(".")[0] + "_output.txt", "w")
+else:
+    f = open("output.txt", "w")
 for token, v in output:
     # skip white space
     if token == "<WHITE SPACE>":
