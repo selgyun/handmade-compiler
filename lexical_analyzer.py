@@ -266,8 +266,22 @@ else:
 
 # error handling when negative integer comes to eof
 # <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
-if len(output) > 1:
-    if output[-1][0] == "<SIGNED INTEGER>" and output[-2][1] == "-":
+
+if len(output) == 2:
+    if (
+        output[-1][0] == "<SIGNED INTEGER>"
+        and output[-1][1] != "0"
+        and output[-2][1] == "-"
+    ):
+        v = output.pop()[1]
+        output.pop()
+        output.append(("<SIGNED INTEGER>", "-" + v))
+elif len(output) > 2:
+    if (
+            output[-1][0] == "<SIGNED INTEGER>"
+            and output[-2][1] == "-"
+            and output[-3][1] == "-"
+    ):
         v = output.pop()[1]
         output.pop()
         output.append(("<SIGNED INTEGER>", "-" + v))
