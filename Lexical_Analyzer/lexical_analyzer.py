@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from transtable import TransitionTable
 from dfa import DFA
 import string, sys
