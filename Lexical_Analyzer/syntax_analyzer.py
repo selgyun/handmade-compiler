@@ -138,13 +138,14 @@ syntax_analyzer = {
     88: {"vtype": [32, "R"], "id": [32, "R"], "rbrace": [32, "R"], "if": [32, "R"], "while": [32, "R"], "return": [32, "R"]},
     "acc": {},
 }
-
-test = deque(["vtype", "id", "lparen", "rparen", "lbrace", "return", "num", "semi", "rbrace"])
+# class a{int b;}
+test = deque(["class", "id", "lbrace", "vtype", "id", "semi", "rbrace"])
 test.append("$")
 stack = deque()
 stack.append(0)
 action = ""
 while action != "acc":
+    print(stack)
     if str(stack[-1]).isdigit():
         if test[0] in syntax_analyzer[stack[-1]]:
             action = syntax_analyzer[stack[-1]][test[0]]
