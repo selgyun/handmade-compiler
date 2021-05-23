@@ -194,7 +194,7 @@ getReady = []
 if len(sys.argv) != 1:
     f = open(sys.argv[1], "r")
 else:
-    f = open("test.java", "r")
+    f = open("test2.java", "r")
 value = ""
 #           -*-    How to lexical analyzer works    -*-
 # 1. Open the file

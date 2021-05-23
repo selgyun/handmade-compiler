@@ -208,9 +208,6 @@ class TransitionTable:
                 "while",
                 "class",
                 "return",
-                "public",
-                "main",
-                "static",
             ]
         )
 

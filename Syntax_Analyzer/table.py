@@ -132,3 +132,22 @@ syntax_analyzer = {
     88: {"vtype": [32, "R"], "id": [32, "R"], "rbrace": [32, "R"], "if": [32, "R"], "while": [32, "R"], "return": [32, "R"]},
     "acc": {},
 }
+
+convert_token = {
+    "SINGLE CHARACTER": "character",
+    "VARIABLE TYPE": "vtype",
+    "SIGNED INTEGER": "num",
+    "BOOLEAN STRING": "boolstr",
+    "ARITHMETIC OPERATOR": ["addsub", "multdiv"],
+    "ASSIGNMENT OPERATOR": "assign",
+    "COMPARISON OPERATOR": "comp",
+    "TERMINATING SYMBOL": "semi",
+    "LPAREN": "lparen",
+    "RPAREN": "rparen",
+    "LBRACE": "lbrace",
+    "RBRACE": "rbrace",
+    "COMMA": "comma",
+    "LITERAL STRING": "literal",
+    "IDENTIFIER": "id",
+    "KEYWORD": ["if", "else", "while", "class", "return"]
+}
