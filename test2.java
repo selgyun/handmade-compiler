@@ -39,6 +39,11 @@ class test2 {
 
         if(true) {
             t = 3923 + 41 - -1- -1-1-1;
+            if(true){
+
+            }else{
+                int d=5;
+            }
         }else{} if(true){
             b_b123 = '3';
         }else{
@@ -54,16 +59,25 @@ class test2 {
         b=b*(a+b);
         while(true!=false){
             a=a+1;
+            while(true){
+                int c=2;
+            }
         }
         String str1="STR";
         return num+a*b;
     }
 
-    String function2(String str, String str1, String str2){
+    String function2(String str, String str1, String str2, int num1, int num2, int num3){
         return str;
     }
 
     int function3(){
-        return 0+1;
+        return 0+1*-1;
     }
+}
+class test3{
+    int function4(){
+        return 0;
+    }
+    int num=-1231;
 }

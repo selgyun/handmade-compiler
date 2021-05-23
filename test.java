@@ -1,6 +1,6 @@
-public class test {
+class test {
 
-	public static int main(String args) {
+	int main(String args) {
 		int _aa_a = 0;
 		char b_b123 = '8';
 		boolean __cc = true;
@@ -9,14 +9,14 @@ public class test {
 		int _123if0 =-1 -0;
 		int publice = -10;
 
-		if(_aa_a <= 0) {
+		if(true) {
 			_aa_a = 3923 * 41 - -1- -1- 1-1 / 10 +2;
-		}else if(_aa_a == 0){
+		}else {
 			b_b123 = '3';
 		}
 		
-		while(__cc) {
-			__cc = false != false;
+		while(false) {
+			__cc = false;
 		}
 		
 		return 0;
