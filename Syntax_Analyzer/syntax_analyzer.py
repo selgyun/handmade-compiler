@@ -3,7 +3,6 @@ import table
 
 reduce = table.reduce
 syntax_analyzer = table.syntax_analyzer
-
 # class a{int b;} # int id(){a = "hello world"; return "hello";}
 test = deque(["vtype", "id", "lparen", "vtype", "id", "comma", "vtype", "id", "rparen", "lbrace", "id", "assign", "literal", "semi", "return", "literal", "semi", "rbrace"])
 test.append("$")

@@ -148,12 +148,12 @@ class TransitionTable:
                 1: {},
                 "final": [1],
             },
-            "LBRANKET": {
+            "LBRACKET": {
                 0: {"[": 1},
                 1: {},
                 "final": [1],
             },
-            "RBRANKET": {
+            "RBRACKET": {
                 0: {"]": 1},
                 1: {},
                 "final": [1],
