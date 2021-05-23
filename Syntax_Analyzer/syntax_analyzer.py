@@ -23,7 +23,7 @@ reduce = {
     19: {"vtype id lparen ARG rparen lbrace BLOCK RETURN rbrace": "FDECL"},
     20: {"vtype id MOREARGS": "ARG"},
     21: {"": "ARG"},
-    22: {"comma vtype id MOREARGS": "MOREARG"},
+    22: {"comma vtype id MOREARGS": "MOREARGS"},
     23: {"": "MOREARGS"},
     24: {"STMT BLOCK": "BLOCK"},
     25: {"": "BLOCK"},
@@ -135,7 +135,7 @@ syntax_analyzer = {
     "acc": {},
 }
 # class a{int b;} # int id(){a = "hello world"; return "hello";}
-test = deque(["vtype", "id", "lparen", "rparen", "lbrace", "vtype", "id", "assign", "literal", "semi", "return", "literal", "semi", "rbrace"])
+test = deque(["vtype", "id", "lparen", "vtype", "id", "comma", "vtype", "id", "rparen", "lbrace", "id", "assign", "literal", "semi", "return", "literal", "semi", "rbrace"])
 test.append("$")
 stack = deque()
 stack.append(0)
