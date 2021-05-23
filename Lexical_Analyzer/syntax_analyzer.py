@@ -12,7 +12,7 @@ reduce = {
     4: {"": "CODE"},
     5: {"vtype id semi": "VDECL"},
     6: {"vtype ASSIGN semi": "VDECL"},
-    7: {"id assign RHS:": "ASSIGN"},
+    7: {"id assign RHS": "ASSIGN"},
     8: {"EXPR": "RHS"},
     9: {"literal": "RHS"},
     10: {"character": "RHS"},
@@ -138,8 +138,8 @@ syntax_analyzer = {
     88: {"vtype": [32, "R"], "id": [32, "R"], "rbrace": [32, "R"], "if": [32, "R"], "while": [32, "R"], "return": [32, "R"]},
     "acc": {},
 }
-# class a{int b;}
-test = deque(["class", "id", "lbrace", "vtype", "id", "semi", "rbrace"])
+# class a{int b;} # int id(){a = "hello world"; return "hello";}
+test = deque(["vtype", "id", "lparen", "rparen", "lbrace", "vtype", "id", "assign", "literal", "semi", "return", "literal", "semi", "rbrace"])
 test.append("$")
 stack = deque()
 stack.append(0)
