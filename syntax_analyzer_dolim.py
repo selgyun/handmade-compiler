@@ -1,6 +1,6 @@
 from collections import deque
-from slr_table import SlrTable
-from dfa import SlrDFA
+from Syntax_Analyzer_Dolim.slr_dfa import SlrDFA
+from Syntax_Analyzer_Dolim.slr_table import SlrTable
 
 
 slrTable = SlrTable()
