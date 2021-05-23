@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from transtable import TransitionTable
+from Lexical_Analyzer.transtable import TransitionTable
 
 # DFA class implements the action of DFA.
 class DFA:

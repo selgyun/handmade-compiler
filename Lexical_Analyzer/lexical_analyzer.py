@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from transtable import TransitionTable
-from dfa import DFA
+from Lexical_Analyzer.transtable import TransitionTable
+from Lexical_Analyzer.dfa import DFA
 import string, sys
 
 
@@ -187,119 +187,135 @@ lexical_analyzer = [
     comma,
     identifier,
 ]
-# output of lexical analyzer
-output = []
-# list of pass dfa : appended when dfa reached final state
-getReady = []
-if len(sys.argv) != 1:
-    f = open(sys.argv[1], "r")
-else:
-    f = open("test2.java", "r")
-value = ""
-#           -*-    How to lexical analyzer works    -*-
-# 1. Open the file
-# 2. perform DFA one by one letter until eof.
-#   2-1. if DFA in 'getReady' got illegal input, goto 4.
-#   2-2. if DFA reached final state, put in 'getReady'
-# 3. 'input' concatenate to 'value', repeat the procedure 2.
-# 4. puts token and 'value' on 'output', reset all DFA and clear 'getReady'
-# 5. perform DFA via current input and check 2-2. goto 2.
-for input in f.read():
-    # to check earn output
-    flag = False
-    for dfa in lexical_analyzer:
-        success = dfa.run(input)
-        if not success and dfa in getReady:
-            # basically '-' is recognized as an arithmetic operator
-            # if <SIGNED INTEGER> follows the '-', the previous token is determine whether '-' in number or operator
-            if len(output) > 0:
-                if (
-                    dfa.name == "SIGNED INTEGER"
-                    and output[-1][0] == "ARITHMETIC OPERATOR"
-                ) and output[-1][1] == "-":
-                    if len(output) > 1:
-                        # ignore <WHITE SPACE>
-                        if output[-2][0] == "WHITE SPACE":
-                            idx = -3
-                        else:
-                            idx = -2
-                        if (
-                            output[idx][0] == "ASSIGNMENT OPERATOR"
-                            or output[idx][0] == "ARITHMETIC OPERATOR"
-                            or output[idx][0] == "COMMA"
-                            or output[idx][0] == "LPAREN"
-                        ):
-                            output.pop()
-                            value = "-" + value
-            # skip ASSIGNMENT OPERATOR when input value is '=' to recognize '=='
-            if dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
-                continue
-            # skip KEYWORD when input value is in alphabet in IDENTIFIER
-            elif (
-                dfa.name == "KEYWORD"
-                and input in string.digits + string.ascii_letters + "_"
-            ):
-                getReady.remove(dfa)
-                continue
-            output.append((dfa.name, value))
-            value = ""
-            getReady.clear()
-            # earn output
-            flag = True
-            for reset_dfa in lexical_analyzer:
-                reset_dfa.reset()
-            break
-        if dfa.isDone() and dfa not in getReady:
-            getReady.append(dfa)
-    if flag:
+
+
+def lexer(filePath):
+    # output of lexical analyzer
+    output = []
+    # list of pass dfa : appended when dfa reached final state
+    getReady = []
+    f = open(filePath, "r")
+    value = ""
+    #           -*-    How to lexical analyzer works    -*-
+    # 1. Open the file
+    # 2. perform DFA one by one letter until eof.
+    #   2-1. if DFA in 'getReady' got illegal input, goto 4.
+    #   2-2. if DFA reached final state, put in 'getReady'
+    # 3. 'input' concatenate to 'value', repeat the procedure 2.
+    # 4. puts token and 'value' on 'output', reset all DFA and clear 'getReady'
+    # 5. perform DFA via current input and check 2-2. goto 2.
+    for input in f.read():
+        # to check earn output
+        flag = False
         for dfa in lexical_analyzer:
-            dfa.run(input)
-            if dfa.isDone():
+            success = dfa.run(input)
+            if not success and dfa in getReady:
+                # basically '-' is recognized as an arithmetic operator
+                # if <SIGNED INTEGER> follows the '-', the previous token is determine whether '-' in number or operator
+                if len(output) > 0:
+                    if (
+                        dfa.name == "SIGNED INTEGER"
+                        and output[-1][0] == "ARITHMETIC OPERATOR"
+                    ) and output[-1][1] == "-":
+                        if len(output) > 1:
+                            # ignore <WHITE SPACE>
+                            if output[-2][0] == "WHITE SPACE":
+                                idx = -3
+                            else:
+                                idx = -2
+                            if (
+                                output[idx][0] == "ASSIGNMENT OPERATOR"
+                                or output[idx][0] == "ARITHMETIC OPERATOR"
+                                or output[idx][0] == "COMMA"
+                                or output[idx][0] == "LPAREN"
+                            ):
+                                output.pop()
+                                value = "-" + value
+                # skip ASSIGNMENT OPERATOR when input value is '=' to recognize '=='
+                if dfa.name == "ASSIGNMENT OPERATOR" and input == "=":
+                    continue
+                # skip KEYWORD when input value is in alphabet in IDENTIFIER
+                elif (
+                    dfa.name == "KEYWORD"
+                    and input in string.digits + string.ascii_letters + "_"
+                ):
+                    getReady.remove(dfa)
+                    continue
+                output.append((dfa.name, value))
+                value = ""
+                getReady.clear()
+                # earn output
+                flag = True
+                for reset_dfa in lexical_analyzer:
+                    reset_dfa.reset()
+                break
+            if dfa.isDone() and dfa not in getReady:
                 getReady.append(dfa)
-    value += input
+        if flag:
+            for dfa in lexical_analyzer:
+                dfa.run(input)
+                if dfa.isDone():
+                    getReady.append(dfa)
+        value += input
 
-isError = False
-# last value handling
-if getReady:
-    output.append((getReady.pop().name, value))
-else:
-    isError = True
-    print("Error occurred at input:\n", value, "\nOutput below is analyze result until error occurred.")
+    isError = False
+    # last value handling
+    if getReady:
+        output.append((getReady.pop().name, value))
+    else:
+        isError = True
+        print(
+            "Error occurred at input:\n",
+            value,
+            "\nOutput below is analyze result until error occurred.",
+        )
 
-# error handling when negative integer comes to eof
-# <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
+    # error handling when negative integer comes to eof
+    # <operator, '-'>, <signed integer, '123'> => <signed integer, '-123'>
 
-if len(output) == 2:
-    if (
-        output[-1][0] == "SIGNED INTEGER"
-        and output[-1][1] != "0"
-        and output[-2][1] == "-"
-    ):
-        v = output.pop()[1]
-        output.pop()
-        output.append(("SIGNED INTEGER", "-" + v))
-elif len(output) > 2:
-    if (
+    if len(output) == 2:
+        if (
+            output[-1][0] == "SIGNED INTEGER"
+            and output[-1][1] != "0"
+            and output[-2][1] == "-"
+        ):
+            v = output.pop()[1]
+            output.pop()
+            output.append(("SIGNED INTEGER", "-" + v))
+    elif len(output) > 2:
+        if (
             output[-1][0] == "SIGNED INTEGER"
             and output[-2][1] == "-"
             and output[-3][1] == "-"
-    ):
-        v = output.pop()[1]
-        output.pop()
-        output.append(("SIGNED INTEGER", "-" + v))
+        ):
+            v = output.pop()[1]
+            output.pop()
+            output.append(("SIGNED INTEGER", "-" + v))
 
-f.close()
-# write file output
-if len(sys.argv) != 1:
-    f = open(sys.argv[1].split(".")[0] + "_output.txt", "w")
-else:
-    f = open("output.txt", "w")
-if isError:
-    f.write("Error occurred at input:\n" + value + "\nOutput below is analyze result until error occurred.\n")
-for token, v in output:
-    # skip white space
-    if token == "WHITE SPACE":
-        continue
-    f.write(token + " " + v + "\n")
-    print(token, v)
-f.close()
+    f.close()
+    # write file output
+    if len(sys.argv) != 1:
+        f = open(sys.argv[1].split(".")[0] + "_output.txt", "w")
+    else:
+        f = open("output.txt", "w")
+    if isError:
+        f.write(
+            "Error occurred at input:\n"
+            + value
+            + "\nOutput below is analyze result until error occurred.\n"
+        )
+    res = []
+    for token, v in output:
+        # skip white space
+        if token == "WHITE SPACE":
+            continue
+        f.write(token + " " + v + "\n")
+        print(token, v)
+    f.close()
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 1:
+        lexer(sys.argv[1])
+    else:
+        lexer("test2.java")
