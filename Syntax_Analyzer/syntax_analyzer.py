@@ -1,14 +1,14 @@
 from collections import deque
-import table
+import new_table
 
 
-reduce = table.reduce
-syntax_analyzer = table.syntax_analyzer
-convert_token = table.convert_token
+reduce = new_table.reduce
+syntax_analyzer = new_table.syntax_analyzer
+convert_token = new_table.convert_token
 input_token = deque()
 
 
-f = open("output.txt", 'r')
+f = open("test2_output.txt", 'r')
 for tokens in f:
     token = tokens.split(' ')
     value = token.pop().strip()
@@ -48,19 +48,19 @@ while action != "acc":
             print("reject!", input_token[0])
             exit(0)
     if isinstance(action, list):
-        if action[1] == "S":
+        if action[0] == "s":
             stack.append(input_token.popleft())
-            stack.append(action[0])
+            stack.append(action[1])
         else:
-            if "" in reduce[action[0]]:
-                stack.append(reduce[action[0]][""])
+            if "" in reduce[action[1]]:
+                stack.append(reduce[action[1]][""])
             else:
                 tmp = deque()
-                while ' '.join(tmp) not in reduce[action[0]]:
+                while ' '.join(tmp) not in reduce[action[1]]:
                     t = str(stack.pop())
                     if t.isalpha():
                         tmp.appendleft(t)
-                stack.append(reduce[action[0]][' '.join(tmp)])
+                stack.append(reduce[action[1]][' '.join(tmp)])
     else:
         stack.append(action)
 print("accept!")
