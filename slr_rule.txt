@@ -28,8 +28,9 @@ STMT ->   VDECL
 STMT -> ASSIGN semi
 STMT ->   if lparen COND rparen lbrace BLOCK rbrace ELSE
 STMT ->   while lparen COND rparen lbrace BLOCK rbrace
-COND ->   lparen COND comp COND rparen
-COND -> boolstr
+COND -> C comp COND
+COND -> C
+C -> boolstr
 ELSE ->   else lbrace BLOCK rbrace 
 ELSE -> ''
 RETURN ->   return RHS semi
