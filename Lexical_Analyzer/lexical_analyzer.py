@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from transtable import TransitionTable
 from dfa import DFA
 import string, sys
@@ -228,6 +227,7 @@ for input in f.read():
                             output[idx][0] == "<ASSIGNMENT OPERATOR>"
                             or output[idx][0] == "<ARITHMETIC OPERATOR>"
                             or output[idx][0] == "<COMMA>"
+                            or output[idx][0] == "<LPAREN>"
                         ):
                             output.pop()
                             value = "-" + value
