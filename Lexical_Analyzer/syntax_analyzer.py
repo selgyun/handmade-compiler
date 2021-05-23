@@ -1,8 +1,4 @@
-from dfa import DFA
-from transtable import TransitionTable
 from collections import deque
-
-table = TransitionTable()
 
 reduce = {
     0: {"CODE": "S"},
