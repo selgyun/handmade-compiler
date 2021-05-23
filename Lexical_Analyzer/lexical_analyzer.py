@@ -125,20 +125,20 @@ rbrace = DFA(
     table.get_final_states("RBRACE"),
 )
 
-lbranket = DFA(
-    "LBRANKET",
+lbracket = DFA(
+    "LBRACKET",
     "[",
-    table.table["LBRANKET"],
+    table.table["LBRACKET"],
     0,
-    table.get_final_states("LBRANKET"),
+    table.get_final_states("LBRACKET"),
 )
 
-rbranket = DFA(
-    "RBRANKET",
+rbracket = DFA(
+    "RBRACKET",
     "]",
-    table.table["RBRANKET"],
+    table.table["RBRACKET"],
     0,
-    table.get_final_states("RBRANKET"),
+    table.get_final_states("RBRACKET"),
 )
 
 comma = DFA(
@@ -182,8 +182,8 @@ lexical_analyzer = [
     rparen,
     lbrace,
     rbrace,
-    lbranket,
-    rbranket,
+    lbracket,
+    rbracket,
     comma,
     identifier,
 ]
@@ -215,19 +215,19 @@ for input in f.read():
             if len(output) > 0:
                 if (
                     dfa.name == "SIGNED INTEGER"
-                    and output[-1][0] == "<ARITHMETIC OPERATOR>"
+                    and output[-1][0] == "ARITHMETIC OPERATOR"
                 ) and output[-1][1] == "-":
                     if len(output) > 1:
                         # ignore <WHITE SPACE>
-                        if output[-2][0] == "<WHITE SPACE>":
+                        if output[-2][0] == "WHITE SPACE":
                             idx = -3
                         else:
                             idx = -2
                         if (
-                            output[idx][0] == "<ASSIGNMENT OPERATOR>"
-                            or output[idx][0] == "<ARITHMETIC OPERATOR>"
-                            or output[idx][0] == "<COMMA>"
-                            or output[idx][0] == "<LPAREN>"
+                            output[idx][0] == "ASSIGNMENT OPERATOR"
+                            or output[idx][0] == "ARITHMETIC OPERATOR"
+                            or output[idx][0] == "COMMA"
+                            or output[idx][0] == "LPAREN"
                         ):
                             output.pop()
                             value = "-" + value
@@ -241,7 +241,7 @@ for input in f.read():
             ):
                 getReady.remove(dfa)
                 continue
-            output.append(("<" + dfa.name + ">", value))
+            output.append((dfa.name, value))
             value = ""
             getReady.clear()
             # earn output
@@ -261,7 +261,7 @@ for input in f.read():
 isError = False
 # last value handling
 if getReady:
-    output.append(("<" + getReady.pop().name + ">", value))
+    output.append((getReady.pop().name, value))
 else:
     isError = True
     print("Error occurred at input:\n", value, "\nOutput below is analyze result until error occurred.")
@@ -271,22 +271,22 @@ else:
 
 if len(output) == 2:
     if (
-        output[-1][0] == "<SIGNED INTEGER>"
+        output[-1][0] == "SIGNED INTEGER"
         and output[-1][1] != "0"
         and output[-2][1] == "-"
     ):
         v = output.pop()[1]
         output.pop()
-        output.append(("<SIGNED INTEGER>", "-" + v))
+        output.append(("SIGNED INTEGER", "-" + v))
 elif len(output) > 2:
     if (
-            output[-1][0] == "<SIGNED INTEGER>"
+            output[-1][0] == "SIGNED INTEGER"
             and output[-2][1] == "-"
             and output[-3][1] == "-"
     ):
         v = output.pop()[1]
         output.pop()
-        output.append(("<SIGNED INTEGER>", "-" + v))
+        output.append(("SIGNED INTEGER", "-" + v))
 
 f.close()
 # write file output
@@ -298,7 +298,7 @@ if isError:
     f.write("Error occurred at input:\n" + value + "\nOutput below is analyze result until error occurred.\n")
 for token, v in output:
     # skip white space
-    if token == "<WHITE SPACE>":
+    if token == "WHITE SPACE":
         continue
     f.write(token + " " + v + "\n")
     print(token, v)
