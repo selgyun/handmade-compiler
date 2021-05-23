@@ -34,7 +34,6 @@ while slrDFA.isDone() == False:
     if running and transition[0] == "s":
         parseStack.append(inputDatum)
         parseStack.append(transition[1])
-        old = slrDFA.state
         slrDFA.setState(transition[1])
         print(parseStack)
         index += 1
@@ -46,7 +45,6 @@ while slrDFA.isDone() == False:
         newState = table[tmp][rule[transition[1]][0]][1]
         parseStack.append(rule[transition[1]][0])
         parseStack.append(newState)
-        old = slrDFA.state
         slrDFA.setState(newState)
         print(parseStack)
 
