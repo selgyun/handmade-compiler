@@ -10,25 +10,28 @@ input_token = deque()
 
 
 def parser(filePath):
-    f = open(filePath, "r")
+    f = open(filePath.split(".")[0] + "_lexer_output.txt", "r")
     for tokens in f:
         token = tokens.split(" ")
+        # print(token)
+        line = token.pop(0)
         value = token.pop().strip()
         while len(token) > 2:
             value = token.pop().strip()
         token = " ".join(token)
         if token == "ARITHMETIC OPERATOR":
             if value == "+" or value == "-":
-                input_token.append(convert_token[token][0])
+                input_token.append((int(line), convert_token[token][0]))
             else:
-                input_token.append(convert_token[token][1])
+                input_token.append((int(line), convert_token[token][1]))
         elif token == "KEYWORD":
-            input_token.append(value)
+            input_token.append((int(line), value))
         else:
-            input_token.append(convert_token[token])
+            input_token.append((int(line), convert_token[token]))
     f.close()
 
-    input_token.append("$")
+    input_token.append((input_token[len(input_token) - 1][0] + 1, "$"))
+
     stack = deque()
     stack.append(0)
     action = ""
@@ -36,20 +39,30 @@ def parser(filePath):
     while action != "acc":
         print(stack)
         if str(stack[-1]).isdigit():
-            if input_token[0] in syntax_analyzer[stack[-1]]:
-                action = syntax_analyzer[stack[-1]][input_token[0]]
+            if input_token[0][1] in syntax_analyzer[stack[-1]]:
+                action = syntax_analyzer[stack[-1]][input_token[0][1]]
             else:
-                print("reject!", input_token[0])
-                exit(0)
+                print(
+                    "reject at line",
+                    input_token[0][0],
+                    "and input token is",
+                    input_token[0][1],
+                )
+                exit(1)
         else:
             if stack[-1] in syntax_analyzer[stack[-2]]:
                 action = syntax_analyzer[stack[-2]][stack[-1]]
             else:
-                print("reject!", input_token[0])
-                exit(0)
+                print(
+                    "reject at line",
+                    input_token[0][0],
+                    "and input token is",
+                    input_token[0][1],
+                )
+                exit(1)
         if isinstance(action, list):
             if action[0] == "s":
-                stack.append(input_token.popleft())
+                stack.append(input_token.popleft()[1])
                 stack.append(action[1])
             else:
                 if "" in reduce[action[1]]:
@@ -63,7 +76,9 @@ def parser(filePath):
                     stack.append(reduce[action[1]][" ".join(tmp)])
         else:
             stack.append(action)
-    print("accept!")
+    else:
+        print("accept!")
+        exit(0)
 
 
 if __name__ == "__main__":

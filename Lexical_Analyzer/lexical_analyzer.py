@@ -295,7 +295,7 @@ def lexer(filePath):
     f.close()
     # write file output
     if len(sys.argv) != 1:
-        f = open(sys.argv[1].split(".")[0] + "_output.txt", "w")
+        f = open(sys.argv[1].split(".")[0] + "_lexer_output.txt", "w")
     else:
         f = open("output.txt", "w")
     if isError:
@@ -305,11 +305,14 @@ def lexer(filePath):
             + "\nOutput below is analyze result until error occurred.\n"
         )
     res = []
+    lineNumber = 1
     for token, v in output:
         # skip white space
         if token == "WHITE SPACE":
+            if "\n" in v:
+                lineNumber += v.count("\n")
             continue
-        f.write(token + " " + v + "\n")
+        f.write(str(lineNumber) + " " + token + " " + v + "\n")
         print(token, v)
     f.close()
 
