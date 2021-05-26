@@ -26,7 +26,7 @@ class test {
         int b=4;
         num=a+b;
         return num;
-    }
+    
 }
 class test2 {
     int temp(int num1, String str) {

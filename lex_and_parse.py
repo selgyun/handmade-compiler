@@ -4,6 +4,6 @@ import sys
 
 if len(sys.argv) != 1:
     lexer(sys.argv[1])
-    parser(sys.argv[1].split(".")[0] + "_output.txt")
+    parser(sys.argv[1])
 else:
     print("Please input file path")
