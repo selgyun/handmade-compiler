@@ -1,3 +1,5 @@
+# rules for action "reduce"
+# The token string corresponding to the 'key' is replaced with the 'value' non-terminal
 reduce = {
     0: {"CODE": "S"},
     1: {"CDECL CODE": "CODE"},
@@ -509,6 +511,7 @@ syntax_analyzer = {
 }
 
 
+# Replace tokens in the lexical analyzer with terms that match the terminal
 convert_token = {
     "SINGLE CHARACTER": "character",
     "VARIABLE TYPE": "vtype",
