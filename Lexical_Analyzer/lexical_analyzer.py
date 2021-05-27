@@ -228,6 +228,7 @@ def lexer(filePath):
                                 or output[idx][0] == "ARITHMETIC OPERATOR"
                                 or output[idx][0] == "COMMA"
                                 or output[idx][0] == "LPAREN"
+                                or output[idx][0] == "LBRACE"
                             ):
                                 output.pop()
                                 value = "-" + value
