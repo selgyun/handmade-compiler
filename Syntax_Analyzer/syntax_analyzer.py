@@ -55,7 +55,7 @@ def parser(filePath):
     action = ""
 
     while action != "acc":
-        print(stack)
+        # print(stack)
         # check where the current state is and load the action form the slr table
         # else reject and show where error occurred.
         if str(stack[-1]).isdigit():

@@ -314,7 +314,7 @@ def lexer(filePath):
                 lineNumber += v.count("\n")
             continue
         f.write(str(lineNumber) + " " + token + " " + v + "\n")
-        print(token, v)
+        # print(token, v)
     f.close()
 
 
